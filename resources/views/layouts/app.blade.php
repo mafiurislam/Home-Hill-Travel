@@ -447,6 +447,21 @@
 
             const formData = new FormData(form);
 
+            if (window.location.hostname.endsWith('github.io')) {
+                bookViaWhatsAppDirect();
+                form.classList.add('hidden');
+                const successView = document.getElementById('drawerSuccessView');
+                const msg = document.getElementById('drawerSuccessMsg');
+                if (msg) {
+                    msg.textContent = `Thank you, ${formData.get('full_name')}. We have opened WhatsApp with your booking details so our travel team can assist you immediately!`;
+                }
+                if (successView) successView.classList.remove('hidden');
+                form.reset();
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                return;
+            }
+
             try {
                 const res = await fetch(form.action, {
                     method: 'POST',
@@ -497,6 +512,31 @@
             if (dest) msg += `Destination: ${encodeURIComponent(dest)}%0A`;
             if (members) msg += `Members: ${encodeURIComponent(members)}%0A`;
             if (date) msg += `Travel Date: ${encodeURIComponent(date)}%0A`;
+
+            window.open(`https://wa.me/919088877795?text=${msg}`, '_blank');
+        }
+
+        // Generic Booking / Inquiry form submit handler
+        function handleBookingSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const name = formData.get('full_name') || 'Traveller';
+            const phone = formData.get('contact_number') || '';
+            const from = formData.get('from_location') || '';
+            const dest = formData.get('destination') || '';
+            const members = formData.get('members') || '1';
+            const message = formData.get('message') || '';
+            const type = formData.get('type') || 'Inquiry';
+
+            let msg = `Hello Hills Home Travels!%0A`
+                    + `New Inquiry (${type}):%0A`
+                    + `Name: ${encodeURIComponent(name)}%0A`
+                    + `Contact: ${encodeURIComponent(phone)}%0A`;
+            if (from) msg += `From: ${encodeURIComponent(from)}%0A`;
+            if (dest) msg += `Destination: ${encodeURIComponent(dest)}%0A`;
+            if (members) msg += `Members: ${encodeURIComponent(members)}%0A`;
+            if (message) msg += `Note: ${encodeURIComponent(message)}%0A`;
 
             window.open(`https://wa.me/919088877795?text=${msg}`, '_blank');
         }
