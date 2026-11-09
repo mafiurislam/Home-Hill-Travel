@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\URL;
 use App\Models\Category;
 use App\Models\TourPackage;
 
-$baseUrl = 'https://mafiurislam.github.io/homehill';
+$baseUrl = 'https://mafiurislam.github.io/Home-Hill-Travel';
 URL::forceRootUrl($baseUrl);
 URL::forceScheme('https');
 config(['app.asset_url' => $baseUrl]);
